@@ -16,6 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from rentme.rentmeapp.views import LoginView, BaseView, ToRentView, WantRentView, SearchView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('/', BaseView.as_view(), name='main'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('add-item', ToRentView.as_view, name='add_item'),
+    path('add-rent', WantRentView.as_view, name='add_rent'),
+    path('search', SearchView.as_view(), name='search')
 ]

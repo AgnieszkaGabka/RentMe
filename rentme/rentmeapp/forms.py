@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 
-class AddToRent(forms.ModelForm):
+class ToRentForm(forms.ModelForm):
 
     class Meta:
         model = ToRent
@@ -18,7 +18,7 @@ class AddToRent(forms.ModelForm):
     price_day = forms.DecimalField()
 
 
-class AddWantRent:
+class WantRentForm:
 
     class Meta:
         model = WantRent
