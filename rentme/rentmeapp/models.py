@@ -1,5 +1,7 @@
 from django.db import models
 
+from django.contrib.auth.models import User
+from django.db.models import CASCADE
 
 CATEGORY = (
     (1, "narzędzia do naprawy domu"),
@@ -14,6 +16,7 @@ CATEGORY = (
 
 
 class ToRent(models.Model):
+    user = models.ForeignKey(User, on_delete=CASCADE)
     category = models.IntegerField(choices=CATEGORY)
     name = models.CharField(max_length=256)
     date_from = models.DateField(auto_now_add=True, blank=True)
@@ -28,3 +31,4 @@ class WantRent(models.Model):
     date_to = models.DateField(blank=True)
     price_day_from = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     price_day_to = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+
