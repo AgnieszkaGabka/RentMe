@@ -1,6 +1,6 @@
 from django import forms
 
-from models import CATEGORY, ToRent, WantRent
+from .models import CATEGORY, ToRent, WantRent
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -11,11 +11,17 @@ class ToRentForm(forms.ModelForm):
         model = ToRent
         exclude = ("user",)
 
-    category = forms.IntegerField(choices=CATEGORY, widget=forms.SelectMultiple())
+    category = forms.IntegerField(widget=forms.SelectMultiple())
     name = forms.CharField()
     date_from = forms.DateField(input_formats=["%Y-%m-%d"])
     date_to = forms.DateField(input_formats=["%Y-%m-%d"])
     price_day = forms.DecimalField()
+
+
+class CreateUserForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['username', 'password1', 'password2']
 
 
 class WantRentForm:
@@ -23,7 +29,7 @@ class WantRentForm:
     class Meta:
         model = WantRent
 
-    category = forms.IntegerField(choices=CATEGORY, widget=forms.SelectMultiple())
+    category = forms.IntegerField(widget=forms.SelectMultiple())
     name = forms.CharField()
     date_from = forms.DateField(input_formats=["%Y-%m-%d"])
     date_to = forms.DateField(input_formats=["%Y-%m-%d"])

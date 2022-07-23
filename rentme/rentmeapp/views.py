@@ -7,7 +7,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views import View
 
-from forms import ToRentForm, WantRentForm, LoginForm
+from .forms import ToRentForm, WantRentForm, LoginForm
+from .models import ToRent
+
 
 class LoginView(View):
 
@@ -32,8 +34,26 @@ class LoginView(View):
         return HttpResponseRedirect('/login/')
 
 
+class RegisterView(View): #rejestracja nowego użytkownika
+
+    def get(self, request):
+        form = CreateUserForm()
+        return render(request, 'register.html', {'form': form}) #formularz dodawania użytkownika
+
+    def post(self, request):
+        form = CreateUserForm(request.POST)
+
+        if form.is_valid():
+            user = form.save() #jeśli dane się zgadzają, utwórz konto
+
+            messages.Info(request, 'Twoje konto zostało utworzone poprawnie')
+            return redirect('login')
+        context = {'form': form}
+        return render(request, 'register.html', context)
+
+
 class BaseView(View):
-    pass
+    template_name = 'main.html'
 
 
 class ToRentView(View):
@@ -44,5 +64,6 @@ class WantRentView(View):
     pass
 
 
-class SearchView(View):
-    pass
+class SearchResultView(View):
+    model = ToRent
+    template_name = 'main.html'

@@ -19,9 +19,15 @@ class ToRent(models.Model):
     user = models.ForeignKey(User, on_delete=CASCADE)
     category = models.IntegerField(choices=CATEGORY)
     name = models.CharField(max_length=256)
-    date_from = models.DateField(auto_now_add=True, blank=True)
+    date_from = models.DateField(blank=True)
     date_to = models.DateField(blank=True)
     price_day = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+
+    class Meta:
+        verbose_name_plural = 'things to rent'
+
+    def __str__(self):
+        return self.name
 
 
 class WantRent(models.Model):
