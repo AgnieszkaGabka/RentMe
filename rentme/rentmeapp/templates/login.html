@@ -1,17 +1,19 @@
-<h2>Logowanie</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Zaloguj się</button>
-    {% if messages %}
-  {% for message in messages %}
-    <div class="alert alert-dismissible alert-success">
-      <button type="button" class="close" data-dismiss="alert">
-      ×
-      </button>
-      <strong>{{message}}<strong>
-    </div>
- {% endfor %}
-{% endif %}
-    <p>Nie masz konta? <a href="{% url 'register' %}">Zarejestruj się</a></p>
-</form>
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% csrf_token %}
+<div class="w3-display-container" style="height:500px;">
+  <div class="w3-display-middle">
+      <form class = "w3-container" action="/auth/" method="POST">{% csrf_token %}
+        <lable>Username</lable>  <input class="w3-input" type="text" name="username"><br><br>
+        <lable>Password</lable>  <input class="w3-input" type="password" name="password"><br><br>
+        <input class="w3-btn w3-green" type="submit">
+      </form><br><br>
+      <div class="w3-container">
+        <a class="w3-btn w3-red" href="/register/">New User ? Sign up Here</a>
+        <a class="w3-btn w3-blue" href="/">Home</a>
+      </div>
+  </div>
+</div>
+{% endblock %}

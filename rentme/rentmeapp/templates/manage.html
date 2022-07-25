@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="w3-bar w3-black w3-large">
+  <div class="w3-bar-item w3-left w3-black">Welcome user: {{user.username}}</div>
+  <a class="w3-bar-item w3-btn w3-black w3-right" href="/logout/">Logout</a>
+  <a class="w3-bar-item w3-btn w3-green w3-right " href="/auth/">Home</a>
+  <a class="w3-bar-item w3-btn w3-green w3-right" href="/order_list/">Orders</a>
+  <a class="w3-bar-item w3-btn w3-green w3-right" href="/manage_items/">Items</a>
+  <a class="w3-ber-item w3-btn w3-green w3-right" href="/search/">Search for items</a>
+</div>
+<h4 class="w3-center" style="padding-top:50">Your orders</h4>
+<div class="w3-center" style="padding:100px;">
+<table class="w3-table w3-striped w3-center">
+{% for order in od %}
+  <tr>
+    <td>name : {{order.item.name}}</td>
+    <td>days : {{order.days}}</td>
+    <td>rent : {{order.rent}}</td>
+    <td><form action = "/delete/" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="id" value="{{order.id}}">
+          <input class="w3-btn w3-red" type="submit" value="delete">
+        </form>
+    </td>
+    <td>
+      <form action = "/update/" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{{order.id}}">
+        <input class="w3-btn w3-green" type="submit" value="update">
+      </form>
+    </td>
+  </tr>
+{% endfor %}
+</table>
+</div>
+
+<h4 class="w3-center" style="padding-top:50">Your Items</h4>
+<div style="padding:50">
+<table class="w3-table w3-striped w3-center">
+{% for item in items_list %}
+  <tr>
+    <td style="padding:20;">Name : {{item.name}}</td>
+    <td style="padding:20;"><form action = "/delete/" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="id" value="{{item.id}}">
+          <input class="w3-btn w3-black" type="submit" value="delete">
+        </form>
+    </td>
+  </tr>
+{% endfor %}
+</table>
+</div>
+{% endblock %}

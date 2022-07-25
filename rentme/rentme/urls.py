@@ -1,14 +1,26 @@
+from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
 
-
-from rentmeapp.views import BaseView, ToRentView, WantRentView, LoginView, RegisterView
+from rentmeapp import views
 
 urlpatterns = [
+    url('/', views.home_page, name='home_page'),
     path('admin/', admin.site.urls),
-    path('main/', BaseView.as_view(), name='main'),
-    path('login/', LoginView.as_view(), name='login'),
-    path('add-item', ToRentView.as_view, name='add_item'),
-    path('add-rent', WantRentView.as_view, name='add_rent'),
-    path('register/', RegisterView.as_view(), name='register'),
+    path('index/', views.index, name='index'),
+    path('login/', views.login, name='login'),
+    path('auth/', views.auth_view, name='auth_view'),
+    path('logout/', views.logout_view, name='logout_view'),
+    path('register/', views.register, name='register'),
+    path('registration/', views.registration, name='registration'),
+    path('add_item/', views.add_item, name='add_item'),
+    path('manage/', views.manage, name='manage'),
+    path('order_list/', views.order_list, name='order_list'),
+    #path('complete/', views.complete, name='complete'),
+    path('search/', views.search, name='search'),
+    path('search_results/', views.search_results, name='search_results'),
+    path('rent/', views.rent_item, name='rent_item'),
+    path('confirmed', views.confirm, name='confirm'),
+    path('update', views.update_order, name='update_order'),
+    path('delete/', views.delete_order, name='delete_order'),
 ]

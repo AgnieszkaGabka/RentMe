@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="w3-bar w3-large w3-black">
+  <div class="w3-bar-item w3-left w3-black">Welcome: {{user.username}}</div>
+  <a class="w3-bar-item w3-btn w3-black w3-right" href="/logout/">Logout</a>
+  <a class="w3-bar-item w3-btn w3-black w3-right" href="/manage/">Manage</a>
+  <a class="w3-ber-item w3-btn w3-green w3-right" href="/search/">Search for items</a>
+</div>
+{% csrf_token %}
+
+<div class="w3-display-container" style="height:400px;">
+  <div class="w3-display-middle">
+<h3>Order Completed</h3>
+Your item order was successful !<br><br>
+total rent : {{order.rent}} Rs.<br><br>
+item : {{order.item.name}}<br><br>
+duration : {{order.days}} days<br><br>
+</div>
+</div>
+{% endblock %}
