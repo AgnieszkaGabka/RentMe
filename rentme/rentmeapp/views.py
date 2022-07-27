@@ -6,12 +6,29 @@ from django.contrib.auth import authenticate
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template.defaulttags import csrf_token
+from django.utils.datastructures import MultiValueDictKeyError
+from django.views import View
 
+from .forms import ToRentForm, AreaForm
 from .models import ToRent, Customer, Area, Orders, WantRent
 
 
-def home_page(request):
-    return render(request, 'index.html')
+class HomePageView(View):
+    def get(self, request):
+        form = AreaForm()
+        return render(request, 'home_page.html', {'form': form})
+
+    def post(self, request):
+        try:
+            city = request.POST['city']
+            pincode = request.POST['pincode']
+            area = Area.objects.get_or_create(city=city, pincode=pincode)
+            form = ToRentForm()
+            return render(request, 'manage.html', {'area': area, 'form': form})
+        except (MultiValueDictKeyError, UnboundLocalError):
+            pass
+        form = ToRentForm()
+        return render(request, 'manage.html', {'form': form})
 
 
 def index(request):
@@ -202,15 +219,17 @@ def add_item(request):
     item.save()
     return render(request, 'item_added.html')
 
+
 @login_required
-def manage_vehicles(request):
+def manage_items(request):
     username = request.user
-    user = User.objects.get(username = username)
+    user = User.objects.get(username=username)
     items_list = []
-    my_items = WantRent.objects.filter(user = user)
+    my_items = ToRent.objects.filter(user=user)
     for i in my_items:
         items_list.append(i)
-    return render(request, 'manage.html', {'items_list':items_list})
+    return render(request, 'manage.html', {'items_list': items_list})
+
 
 @login_required
 def order_list(request):

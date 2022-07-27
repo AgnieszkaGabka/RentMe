@@ -4,8 +4,10 @@ from django.urls import path
 
 from rentmeapp import views
 
+from rentmeapp.views import HomePageView
+
 urlpatterns = [
-    url('/', views.home_page, name='home_page'),
+    url('', HomePageView.as_view(), name='home_page'),
     path('admin/', admin.site.urls),
     path('index/', views.index, name='index'),
     path('login/', views.login, name='login'),
@@ -15,6 +17,7 @@ urlpatterns = [
     path('registration/', views.registration, name='registration'),
     path('add_item/', views.add_item, name='add_item'),
     path('manage/', views.manage, name='manage'),
+    path('manage_items/', views.manage_items, name='manage_items'),
     path('order_list/', views.order_list, name='order_list'),
     #path('complete/', views.complete, name='complete'),
     path('search/', views.search, name='search'),

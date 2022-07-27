@@ -2,9 +2,9 @@
 {% block content %}
 <div class="w3-bar w3-large w3-black">
   <div class="w3-bar-item w3-left w3-black">Welcome: {{user.username}}</div>
-  <a class="w3-bar-item w3-btn w3-black w3-right" href="/logout/">Logout</a>
-  <a class="w3-bar-item w3-btn w3-black w3-right" href="/manage/">Manage</a>
-  <a class="w3-ber-item w3-btn w3-green w3-right" href="/search/">Search for items</a>
+  <a href="/logout/">Logout</a>
+  <a href="/manage/">Manage</a>
+  <a href="/search/">Search for items</a>
 </div>
 {% csrf_token %}
 
