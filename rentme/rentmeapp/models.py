@@ -59,10 +59,10 @@ class WantRent(models.Model):
     is_available = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name_plural = 'things to rent to others'
+        verbose_name_plural = 'things to rent from others'
 
     def __str__(self):
-        return self.name
+        return str.get_area_display()
 
 
 class Orders(models.Model):
