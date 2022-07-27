@@ -4,22 +4,22 @@ from django import forms
 from rentmeapp.models import ToRent, CATEGORY, Area
 
 
-class AreaForm(forms.ModelForm):
-
-    class Meta:
-        model = Area
-        fields = ['city', 'pincode']
-
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', '')
-        super(AreaForm, self).__init__(*args, **kwargs)
+# class AreaForm(forms.ModelForm):
+#
+#     class Meta:
+#         model = Area
+#         fields = ['city', 'pincode']
+#
+#     def __init__(self, *args, **kwargs):
+#         user = kwargs.pop('user', '')
+#         super(AreaForm, self).__init__(*args, **kwargs)
 
 
 class ToRentForm(forms.ModelForm):
 
     class Meta:
         model = ToRent
-        exclude = ("user", "area")
+        exclude = ("user",)
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', '')

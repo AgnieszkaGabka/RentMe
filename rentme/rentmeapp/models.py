@@ -43,7 +43,7 @@ class ToRent(models.Model):
     is_available = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name_plural = 'things to rent'
+        verbose_name_plural = 'things to rent to others'
 
     def __str__(self):
         return self.name
@@ -58,6 +58,12 @@ class WantRent(models.Model):
     price_day = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     is_available = models.BooleanField(default=True)
 
+    class Meta:
+        verbose_name_plural = 'things to rent to others'
+
+    def __str__(self):
+        return self.name
+
 
 class Orders(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
@@ -65,3 +71,4 @@ class Orders(models.Model):
     item = models.ForeignKey(ToRent, on_delete=models.PROTECT)
     days = models.CharField(max_length=3)
     is_complete = models.BooleanField(default=False)
+

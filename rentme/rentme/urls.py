@@ -7,7 +7,7 @@ from rentmeapp import views
 from rentmeapp.views import HomePageView
 
 urlpatterns = [
-    url('', HomePageView.as_view(), name='home_page'),
+    url('home/', HomePageView.as_view(), name='home_page'),
     path('admin/', admin.site.urls),
     path('index/', views.index, name='index'),
     path('login/', views.login, name='login'),

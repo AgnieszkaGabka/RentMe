@@ -4,31 +4,28 @@ from django.contrib.auth.models import User
 
 from django.contrib.auth import authenticate
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.defaulttags import csrf_token
-from django.utils.datastructures import MultiValueDictKeyError
 from django.views import View
 
-from .forms import ToRentForm, AreaForm
+from .forms import ToRentForm
 from .models import ToRent, Customer, Area, Orders, WantRent
 
 
 class HomePageView(View):
     def get(self, request):
-        form = AreaForm()
+        form = ToRentForm()
         return render(request, 'home_page.html', {'form': form})
 
     def post(self, request):
-        try:
-            city = request.POST['city']
-            pincode = request.POST['pincode']
-            area = Area.objects.get_or_create(city=city, pincode=pincode)
-            form = ToRentForm()
-            return render(request, 'manage.html', {'area': area, 'form': form})
-        except (MultiValueDictKeyError, UnboundLocalError):
-            pass
-        form = ToRentForm()
-        return render(request, 'manage.html', {'form': form})
+        form = ToRentForm(request.POST, user=request.user)
+        if form.is_valid():
+            user = request.user
+            return redirect(request, 'manage.html')
+        else:
+            form = ToRentForm(user=request.user)
+            context = {'form': form}
+            return render(request, 'home_page.html', context=context)
 
 
 def index(request):
