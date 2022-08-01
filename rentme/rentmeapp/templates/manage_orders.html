@@ -33,21 +33,3 @@
 {% endfor %}
 </table>
 </div>
-
-<h4 class="w3-center" style="padding-top:50">Your Items</h4>
-<div style="padding:50">
-<table class="w3-table w3-striped w3-center">
-{% for item in items_list %}
-  <tr>
-    <td style="padding:20;">Name : {{item.name}}</td>
-    <td style="padding:20;"><form action = "/delete/" method="post">
-          {% csrf_token %}
-          <input type="hidden" name="id" value="{{item.id}}">
-          <input class="w3-btn w3-black" type="submit" value="delete">
-        </form>
-    </td>
-  </tr>
-{% endfor %}
-</table>
-</div>
-{% endblock %}

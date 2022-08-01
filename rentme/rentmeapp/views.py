@@ -21,11 +21,18 @@ class HomePageView(View):
         form = ToRentForm(request.POST, user=request.user)
         if form.is_valid():
             user = request.user
-            return redirect(request, 'manage.html')
+            category = form.cleaned_data['category']
+            name = form.cleaned_data['name']
+            date_from = form.cleaned_data['date_from']
+            date_to = form.cleaned_data['date_to']
+            area = form.cleaned_data['area']
+            price_day = form.cleaned_data['price_day']
+            item = ToRent.objects.create(user=user, category=category, name=name, date_from=date_from, date_to=date_to,
+                                         area=area, price_day=price_day)
+            item.save()
+            return render(request, 'manage_items.html')
         else:
-            form = ToRentForm(user=request.user)
-            context = {'form': form}
-            return render(request, 'home_page.html', context=context)
+            return redirect(f'/home/')
 
 
 def index(request):
@@ -41,7 +48,8 @@ def login(request):
 
 def auth_view(request):
     if request.user.is_authenticated:
-        return render(request, 'home_page.html')
+        form = ToRentForm()
+        return render(request, 'home_page.html', {'form': form})
     else:
         username = request.POST['username']
         password = request.POST['password']
@@ -52,7 +60,8 @@ def auth_view(request):
             customer = None
         if customer is not None:
             auth.login(request, user)
-            return render(request, 'home_page.html')
+            form = ToRentForm()
+            return render(request, 'home_page.html', {'form': form})
         else:
             return render(request, 'login_failed.html')
 
@@ -127,7 +136,7 @@ def rent_item(request):
     item_id = request.POST['id']
     item = ToRent.objects.get(id=item_id)
     price_day = int(item.price_day)
-    return render(request, 'confirmation.html', {'item': item, 'price_day': price_day})
+    return render(request, 'confirmation_order.html', {'item': item, 'price_day': price_day})
 
 
 @login_required
@@ -146,15 +155,15 @@ def confirm(request):
             order = Orders.objects.get(item=item, user=user, rent=rent, days=days)
         item.is_available = False
         item.save()
-        return render(request, 'confirmed.html', {'order':order})
+        return render(request, 'confirmed.html', {'order': order})
     else:
         return render(request, 'order_failed.html')
 
 
 @login_required
-def manage(request):
+def manage_orders(request):
     order_list = []
-    user = User.objects.get(username=request.user)
+    user = request.user
     try:
         orders = Orders.objects.filter(user=user)
     except:
@@ -162,9 +171,9 @@ def manage(request):
     if orders is not None:
         for o in orders:
             if not o.is_complete:
-                order_dictionary = {'id':o.id,'rent':o.rent, 'item':o.item, 'days':o.days}
+                order_dictionary = {'id': o.id, 'rent': o.rent, 'item': o.item, 'days': o.days}
                 order_list.append(order_dictionary)
-    return render(request, 'manage.html', {'od':order_list})
+    return render(request, 'manage_orders.html', {'od': order_list})
 
 
 @login_required
@@ -176,7 +185,18 @@ def update_order(request):
     item.save()
     order.delete()
     cost_day = item.price_day
-    return render(request, 'confirmation.html', {'item': item}, {'cost_day': cost_day})
+    return render(request, 'confirmation_order.html', {'item': item}, {'cost_day': cost_day})
+
+
+@login_required
+def update_item(request):
+    item_id = request.POST['id']
+    item = ToRent.objects.get(id=item_id)
+    item.is_available = True
+    item.save()
+    item.delete()
+    cost_day = item.price_day
+    return render(request, 'confirmation_item.html', {'item': item}, {'cost_day': cost_day})
 
 
 @login_required
@@ -187,7 +207,17 @@ def delete_order(request):
     item.is_available = True
     item.save()
     order.delete()
-    return HttpResponseRedirect('/manage/')
+    return HttpResponseRedirect('/manage_orders/')
+
+
+@login_required
+def delete_item(request):
+    item_id = request.POST['id']
+    item = ToRent.objects.get(id=item_id)
+    item.is_available = True
+    item.save()
+    item.delete()
+    return HttpResponseRedirect('/manage_items/')
 
 
 @login_required
@@ -201,18 +231,18 @@ def add_item(request):
     pincode = request.POST['pincode']
     price_day = request.POST['price_day']
     try:
-        area = Area.objects.get(city = city, pincode = pincode)
+        area = Area.objects.get(city=city, pincode=pincode)
     except:
         area = None
     if area is not None:
-        item = WantRent(category=category, name=name, date_from=date_from, date_to=date_to, area = area,
-                        price_day = price_day)
+        item = WantRent(category=category, name=name, date_from=date_from, date_to=date_to, area=area,
+                        price_day=price_day)
     else:
-        area = Area(city = city, pincode = pincode)
+        area = Area(city=city, pincode=pincode)
         area.save()
-        area = Area.objects.get(city = city, pincode = pincode)
-        item = WantRent(category=category, name=name, date_from=date_from, date_to=date_to, area = area,
-                        price_day = price_day)
+        area = Area.objects.get(city=city, pincode=pincode)
+        item = WantRent(category=category, name=name, date_from=date_from, date_to=date_to, area=area,
+                        price_day=price_day)
     item.save()
     return render(request, 'item_added.html')
 
@@ -225,17 +255,17 @@ def manage_items(request):
     my_items = ToRent.objects.filter(user=user)
     for i in my_items:
         items_list.append(i)
-    return render(request, 'manage.html', {'items_list': items_list})
+    return render(request, 'manage_items.html', {'items_list': items_list})
 
 
 @login_required
 def order_list(request):
     username = request.user
-    user = User.objects.get(username = username)
-    orders = Orders.objects.filter(user = user)
+    user = User.objects.get(username=username)
+    orders = Orders.objects.filter(user=user)
     order_list = []
     for o in orders:
-        if o.is_complete == False:
+        if not o.is_complete:
             order_list.append(o)
     return render(request, 'order_list.html', {'order_list': order_list})
 

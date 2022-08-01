@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="w3-bar w3-black w3-large">
+  <div class="w3-bar-item w3-left w3-black">Welcome user: {{user.username}}</div>
+  <a href="/logout/">Logout</a>
+  <a href="/auth/">Home</a>
+  <a href="/order_list/">Orders</a>
+  <a href="/manage_items/">Items</a>
+  <a href="/search/">Search for items</a>
+</div>
+
+
+<h4 class="w3-center" style="padding-top:50">Your Items</h4>
+<div style="padding:50">
+<table class="w3-table w3-striped w3-center">
+{% for item in items_list %}
+  <tr>
+    <td style="padding:20;">Name : {{item.name}}</td>
+    <td style="padding:20;"><form action = "/delete-item/" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="id" value="{{item.id}}">
+          <input class="w3-btn w3-black" type="submit" value="delete">
+        </form>
+    </td>
+  </tr>
+{% endfor %}
+</table>
+</div>
+{% endblock %}

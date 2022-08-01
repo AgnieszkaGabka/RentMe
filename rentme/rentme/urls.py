@@ -7,7 +7,7 @@ from rentmeapp import views
 from rentmeapp.views import HomePageView
 
 urlpatterns = [
-    url('home/', HomePageView.as_view(), name='home_page'),
+    url('home/', HomePageView.as_view(), name='home'),
     path('admin/', admin.site.urls),
     path('index/', views.index, name='index'),
     path('login/', views.login, name='login'),
@@ -16,7 +16,7 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('registration/', views.registration, name='registration'),
     path('add_item/', views.add_item, name='add_item'),
-    path('manage/', views.manage, name='manage'),
+    path('manage_orders/', views.manage_orders, name='manage_orders'),
     path('manage_items/', views.manage_items, name='manage_items'),
     path('order_list/', views.order_list, name='order_list'),
     #path('complete/', views.complete, name='complete'),
@@ -24,6 +24,8 @@ urlpatterns = [
     path('search_results/', views.search_results, name='search_results'),
     path('rent/', views.rent_item, name='rent_item'),
     path('confirmed', views.confirm, name='confirm'),
-    path('update', views.update_order, name='update_order'),
-    path('delete/', views.delete_order, name='delete_order'),
+    path('update-order/', views.update_order, name='update_order'),
+    path('delete-order/', views.delete_order, name='delete_order'),
+    path('update-item/', views.update_item, name='update_item'),
+    path('delete-item/', views.delete_item, name='delete_item'),
 ]
