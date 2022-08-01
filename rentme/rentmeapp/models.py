@@ -49,22 +49,6 @@ class ToRent(models.Model):
         return self.name
 
 
-class WantRent(models.Model):
-    category = models.IntegerField(choices=CATEGORY)
-    name = models.CharField(max_length=256)
-    date_from = models.DateField(auto_now_add=True, blank=True)
-    date_to = models.DateField(blank=True)
-    area = models.ForeignKey(Area, on_delete=models.SET_NULL, null=True)
-    price_day = models.DecimalField(max_digits=5, decimal_places=2, default=0)
-    is_available = models.BooleanField(default=True)
-
-    class Meta:
-        verbose_name_plural = 'things to rent from others'
-
-    def __str__(self):
-        return str.get_area_display()
-
-
 class Orders(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     rent = models.CharField(max_length=8)

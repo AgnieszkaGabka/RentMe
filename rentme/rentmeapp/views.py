@@ -9,7 +9,7 @@ from django.template.defaulttags import csrf_token
 from django.views import View
 
 from .forms import ToRentForm
-from .models import ToRent, Customer, Area, Orders, WantRent
+from .models import ToRent, Customer, Area, Orders
 
 
 class HomePageView(View):
@@ -235,14 +235,14 @@ def add_item(request):
     except:
         area = None
     if area is not None:
-        item = WantRent(category=category, name=name, date_from=date_from, date_to=date_to, area=area,
-                        price_day=price_day)
+        item = ToRent(category=category, name=name, date_from=date_from, date_to=date_to, area=area,
+                      price_day=price_day)
     else:
         area = Area(city=city, pincode=pincode)
         area.save()
         area = Area.objects.get(city=city, pincode=pincode)
-        item = WantRent(category=category, name=name, date_from=date_from, date_to=date_to, area=area,
-                        price_day=price_day)
+        item = ToRent(category=category, name=name, date_from=date_from, date_to=date_to, area=area,
+                      price_day=price_day)
     item.save()
     return render(request, 'item_added.html')
 
@@ -273,6 +273,6 @@ def order_list(request):
 @login_required
 def delete(request):
     item_id = request.POST['id']
-    item = WantRent.objects.get(id=item_id)
+    item = ToRent.objects.get(id=item_id)
     item.delete()
     return HttpResponseRedirect('/manage_items/')
