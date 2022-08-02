@@ -25,3 +25,4 @@ class ToRentForm(forms.ModelForm):
         user = kwargs.pop('user', '')
         super(ToRentForm, self).__init__(*args, **kwargs)
         #self.fields['user_defined_area'] = forms.ModelChoiceField(queryset=Area.objects.filter(user=user))
+

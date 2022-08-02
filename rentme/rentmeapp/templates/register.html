@@ -8,9 +8,7 @@
 <div class="w3-display-container"  style="height:1000px;">
 <div class="w3-display-middle">
 
-<form class="w3-container" action="registration/" method="POST">{% csrf_token %}
-  <label>First Name</label> <input class="w3-input" type="text" name="firstname"><br><br>
-  <label>LastName</label> <input class="w3-input" type="text" name="lastname"><br><br>
+<form class="w3-container" action="/registration/" method="POST">{% csrf_token %}
   <label>Username</label> <input class="w3-input" type="text" name="username"><br><br>
   <label>Password</label> <input class="w3-input" type="password" name="password"><br><br>
   <label>Email</label> <input class="w3-input" type="text" name="email"><br><br>

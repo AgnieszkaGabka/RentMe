@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="w3-bar w3-large w3-black">
+  <div class="w3-bar-item w3-left w3-black">User: {{user.username}}
+  Add item you want to rent</div>
+  <a href="/logout/">Logout</a>
+  <a href="/manage_items/">Manage</a>
+</div>
+
+<div class="w3-display-container" style="height:300px;">
+  <div class="w3-display-middle">
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Add">
+</form>
+
+
+{% endblock %}

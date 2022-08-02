@@ -35,13 +35,6 @@ class HomePageView(View):
             return redirect(f'/home/')
 
 
-def index(request):
-    if not request.user.is_authenticated:
-        return render(request, 'login.html')
-    else:
-        return render(request, 'home_page.html')
-
-
 def login(request):
     return render(request, 'login.html')
 
@@ -78,32 +71,24 @@ def register(request):
 def registration(request):
     username = request.POST['username']
     password = request.POST['password']
-    mobile = request.POST['mobile']
-    firstname = request.POST['firstname']
-    lastname = request.POST['lastname']
     email = request.POST['email']
     city = request.POST['city']
     city = city.lower()
     pincode = request.POST['pincode']
     try:
-        user = User.objects.create_user(username=username, password=password, email=email)
-        user.first_name = firstname
-        user.last_name = lastname
-        user.save()
-    except:
+        user = User.objects.get(username=username, password=password, email=email)
         return render(request, 'registration_error.html')
+    except User.DoesNotExist:
+        user = User.objects.create_user(username=username, password=password, email=email)
+        user.save()
     try:
         area = Area.objects.get(city=city, pincode=pincode)
-
-    except:
-        area = None
-    if area is not None:
-        customer = Customer(user=user, mobile=mobile, area=area)
-    else:
+        customer = Customer(user=user, area=area)
+    except Area.DoesNotExist:
         area = Area(city=city, pincode=pincode)
         area.save()
         area = Area.objects.get(city=city, pincode=pincode)
-        customer = Customer(user=user, mobile=mobile, area=area)
+        customer = Customer(user=user, area=area)
 
     customer.save()
     return render(request, 'registered.html')
@@ -220,31 +205,28 @@ def delete_item(request):
     return HttpResponseRedirect('/manage_items/')
 
 
-@login_required
-def add_item(request):
-    category = request.post['category']
-    name = request.POST['name']
-    date_from = request.POST['date_from']
-    date_to = request.POST['date_to']
-    city = request.POST['city']
-    city = city.lower()
-    pincode = request.POST['pincode']
-    price_day = request.POST['price_day']
-    try:
-        area = Area.objects.get(city=city, pincode=pincode)
-    except:
-        area = None
-    if area is not None:
-        item = ToRent(category=category, name=name, date_from=date_from, date_to=date_to, area=area,
-                      price_day=price_day)
-    else:
-        area = Area(city=city, pincode=pincode)
-        area.save()
-        area = Area.objects.get(city=city, pincode=pincode)
-        item = ToRent(category=category, name=name, date_from=date_from, date_to=date_to, area=area,
-                      price_day=price_day)
-    item.save()
-    return render(request, 'item_added.html')
+class AddItemView(View):
+
+    def get(self, request):
+        user = request.user
+        form = ToRentForm()
+        return render(request, 'add_item.html', {'form': form})
+
+    def post(self, request):
+        user = request.user
+        form = ToRentForm(request.POST)
+        if form.is_valid():
+            category = request.POST['category']
+            name = form.cleaned_data['name']
+            date_from = form.cleaned_data['date_from']
+            date_to = form.cleaned_data['date_to']
+            area = form.cleaned_data['area']
+            price_day = form.cleaned_data['price_day']
+            item = ToRent(user=user, category=category, name=name, date_from=date_from, date_to=date_to, area=area,
+                              price_day=price_day)
+            item.save()
+            return render(request, 'manage_items.html')
+        return redirect(f'/home/')
 
 
 @login_required
