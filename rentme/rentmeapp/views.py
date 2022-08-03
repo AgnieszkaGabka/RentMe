@@ -124,12 +124,11 @@ def rent_item(request):
 @login_required
 def confirm(request):
     item_id = request.POST['id']
-    username = request.user
-    user = User.objects.get(username=username)
+    user = request.user
     days = request.POST['days']
     item = ToRent.objects.get(id=item_id)
     if item.is_available:
-        rent = int(days)
+        rent = int(days) * int(item.price_day)
         try:
             order = Orders(item=item, user=user, rent=rent, days=days)
             order.save()

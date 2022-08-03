@@ -4,17 +4,17 @@
 <div class="w3-bar w3-large w3-black">
   <div class="w3-bar-item w3-left w3-black">Welcome: {{user.username}}</div>
   <a href="/logout/">Logout</a>
-  <a href="/manage/">Manage</a>
+  <a href="/manage-orders/">Manage your orders</a>
   <a href="/search/">Search for items</a>
 </div>
 <div class="w3-container w3-center" style="padding:100px  ">
-name : {{item.name}}
+name : {{item.name}} <br>
 <form class="w3-container" action="/confirmed/" method="post">
   {% csrf_token %}
-  Price : {{cost_day}} / day<br><br>
+  Price : {{item.price_day}} / day<br><br>
   <lable>For How many days ?</lable> : <input type="text" name="days"><br><br>
+  <input type="hidden" value= {{item.id}} name="id">
   <input class="w3-btn w3-green" type="submit" value="confirm order"><br><br>
-  <input type="hidden" item="{{item.id}}" name="id">
   <br><br>
 </form>
 </div>
