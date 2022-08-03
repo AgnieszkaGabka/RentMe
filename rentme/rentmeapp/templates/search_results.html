@@ -4,22 +4,23 @@
 <div class="w3-bar w3-large w3-black">
   <div class="w3-bar-item w3-left w3-black">Welcome: {{user.username}}</div>
   <a href="/logout/">Logout</a>
-  <a href="/manage/">Manage</a>
-  <a href="/search/">Search for items</a>
+  <a href="/manage-orders/">Manage your orders</a>
+  <a href="/manage-items/">Manage your items</a>
+  <a href="/search/">Back to search</a>
 </div>
 
 <h4 class="w3-center" style="padding-top:50">Search Results</h4>
 
 <div class="w3-center" style="padding:100px;">
 <table class="w3-table w3-striped w3-center w3-large">
-  {% for items in request.session.items_list %}
-
+  {% for item in items_list %}
     <tr>
       <td style="padding:20">item : {{item.name}}</td>
+      <td style="padding:20">user renting : {{item.user.username}}</td>
       <td style="padding:20">category : {{item.category}}</td>
       <td style="padding:20">available from : {{item.date_from}}</td>
       <td style="padding:20">available to : {{item.date_to}}</td>
-      <td style="padding:20">pincode : {{item.pincode}}</td>
+      <td style="padding:20">Price per day : {{item.price_day}}</td>
       <td style="padding:20"><form action = "/rent/" method="post">
           {% csrf_token %}
           <input type="hidden" name="id" value="{{item.id}}">
@@ -27,7 +28,6 @@
           </form>
       </td style="padding:20">
     </tr>
-
   {% endfor %}
 </table>
 </div>

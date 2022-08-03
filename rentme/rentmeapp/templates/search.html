@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="w3-bar w3-large w3-black">
-  <div class="w3-bar-item w3-left w3-black">User: {{user.username}}
+  <div class="w3-bar-item w3-left w3-black">User: {{user.username}} <br>
   Search for items to rent in your area</div>
   <a href="/logout/">Logout</a>
-  <a href="/manage/">Manage</a>
+  <a href="/manage-orders/">Manage your orders</a>
+  <a href="/manage-items/">Manage your items</a>
 </div>
 
 <div class="w3-display-container" style="height:300px;">

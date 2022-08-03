@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 from django.contrib.auth import authenticate
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template.defaulttags import csrf_token
@@ -94,26 +95,22 @@ def registration(request):
     return render(request, 'registered.html')
 
 
-@login_required
 def search(request):
     return render(request, 'search.html')
 
 
-@login_required
 def search_results(request):
     city = request.POST['city']
-    city = city.lower()
     items_list = []
-    area = Area.objects.filter(city=city)
-    for a in area:
-        items = ToRent.objects.filter(area=a)
-        for item in items:
-            if item.is_available:
-                item_dictionary = {'user': item.user, 'category': item.category, 'name': item.name,
-                                   'date_from': item.date_from, 'date_to': item.date_to, 'price_day': item.price_day}
-                items_list.append(item_dictionary)
-    request.session['items_list'] = items_list
-    return render(request, 'search_results.html')
+    try:
+        area = Area.objects.get(city=city)
+    except Area.DoesNotExist:
+        return render(request, 'search.html')
+    items = ToRent.objects.filter(area=area)
+    for item in items:
+        if item.is_available:
+            items_list.append(item)
+    return render(request, 'search_results.html', {'items_list': items_list})
 
 
 @login_required
