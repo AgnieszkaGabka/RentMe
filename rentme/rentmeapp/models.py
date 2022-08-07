@@ -54,5 +54,4 @@ class Orders(models.Model):
     rent = models.CharField(max_length=8)
     item = models.ForeignKey(ToRent, on_delete=models.PROTECT)
     days = models.CharField(max_length=3)
-    is_complete = models.BooleanField(default=False)
 

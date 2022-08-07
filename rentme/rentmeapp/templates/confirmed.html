@@ -12,10 +12,13 @@
 <div class="w3-display-container" style="height:400px;">
   <div class="w3-display-middle">
 <h3>Order Completed</h3>
+<form class="w3-container" action="/update-order/" method="post">{% csrf_token %}
 Your item order was successful !<br><br>
 total rent : {{order.rent}} zł<br><br>
 item : {{order.item.name}}<br><br>
 duration : {{order.days}} days<br><br>
+<input type="hidden" value= {{order.id}} name="id">
+<input class="w3-btn w3-green" type="submit" value="Change"><br><br>
 </div>
 </div>
 {% endblock %}

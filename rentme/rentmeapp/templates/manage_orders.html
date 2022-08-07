@@ -4,8 +4,8 @@
   <div class="w3-bar-item w3-left w3-black">Welcome user: {{user.username}}</div>
   <a href="/logout/">Logout</a>
   <a href="/auth/">Home</a>
-  <a href="/order_list/">Orders</a>
-  <a href="/manage_items/">Items</a>
+  <a href="/order-list/">Orders</a>
+  <a href="/manage-items/">Items</a>
   <a href="/search/">Search for items</a>
 </div>
 <h4 class="w3-center" style="padding-top:50">Your orders</h4>
@@ -16,14 +16,14 @@
     <td>name : {{order.item.name}}</td>
     <td>days : {{order.days}}</td>
     <td>rent : {{order.rent}}</td>
-    <td><form action = "/delete/" method="post">
+    <td><form action = "/delete-order/" method="post">
           {% csrf_token %}
           <input type="hidden" name="id" value="{{order.id}}">
           <input class="w3-btn w3-red" type="submit" value="delete">
         </form>
     </td>
     <td>
-      <form action = "/update/" method="post">
+      <form action = "/update-order/" method="post">
         {% csrf_token %}
         <input type="hidden" name="id" value="{{order.id}}">
         <input class="w3-btn w3-green" type="submit" value="update">
@@ -31,5 +31,6 @@
     </td>
   </tr>
 {% endfor %}
+{% endblock %}
 </table>
 </div>

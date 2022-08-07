@@ -17,7 +17,6 @@ urlpatterns = [
     path('add-item/', AddItemView.as_view(), name='add_item'),
     path('manage-orders/', views.manage_orders, name='manage_orders'),
     path('manage-items/', views.manage_items, name='manage_items'),
-    path('order-list/', views.order_list, name='order_list'),
     path('search/', views.search, name='search'),
     path('search-results/', views.search_results, name='search_results'),
     path('rent/', views.rent_item, name='rent_item'),

@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template.defaulttags import csrf_token
+from django.utils.datastructures import MultiValueDictKeyError
 from django.views import View
 
 from .forms import ToRentForm
@@ -145,15 +146,11 @@ def confirm(request):
 def manage_orders(request):
     order_list = []
     user = request.user
-    try:
-        orders = Orders.objects.filter(user=user)
-    except:
-        orders = None
+    orders = Orders.objects.filter(user=user)
     if orders is not None:
         for o in orders:
-            if not o.is_complete:
-                order_dictionary = {'id': o.id, 'rent': o.rent, 'item': o.item, 'days': o.days}
-                order_list.append(order_dictionary)
+            order_dictionary = {'id': o.id, 'rent': o.rent, 'item': o.item, 'days': o.days}
+            order_list.append(order_dictionary)
     return render(request, 'manage_orders.html', {'od': order_list})
 
 
@@ -162,11 +159,8 @@ def update_order(request):
     order_id = request.POST['id']
     order = Orders.objects.get(id=order_id)
     item = order.item
-    item.is_available = True
-    item.save()
-    order.delete()
-    cost_day = item.price_day
-    return render(request, 'confirmation_order.html', {'item': item}, {'cost_day': cost_day})
+    cost = int(item.price_day) * int(order.days)
+    return render(request, 'confirmation_order.html', {'item': item}, {'cost': cost})
 
 
 @login_required
@@ -175,7 +169,6 @@ def update_item(request):
     item = ToRent.objects.get(id=item_id)
     item.is_available = True
     item.save()
-    item.delete()
     cost_day = item.price_day
     return render(request, 'confirmation_item.html', {'item': item}, {'cost_day': cost_day})
 
@@ -188,7 +181,7 @@ def delete_order(request):
     item.is_available = True
     item.save()
     order.delete()
-    return HttpResponseRedirect('/manage_orders/')
+    return HttpResponseRedirect('/manage-orders/')
 
 
 @login_required
@@ -198,7 +191,7 @@ def delete_item(request):
     item.is_available = True
     item.save()
     item.delete()
-    return HttpResponseRedirect('/manage_items/')
+    return HttpResponseRedirect('/manage-items/')
 
 
 class AddItemView(View):
@@ -234,18 +227,6 @@ def manage_items(request):
     for i in my_items:
         items_list.append(i)
     return render(request, 'manage_items.html', {'items_list': items_list})
-
-
-@login_required
-def order_list(request):
-    username = request.user
-    user = User.objects.get(username=username)
-    orders = Orders.objects.filter(user=user)
-    order_list = []
-    for o in orders:
-        if not o.is_complete:
-            order_list.append(o)
-    return render(request, 'order_list.html', {'order_list': order_list})
 
 
 @login_required
