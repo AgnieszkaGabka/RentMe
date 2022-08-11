@@ -160,7 +160,7 @@ def update_order(request):
     order = Orders.objects.get(id=order_id)
     item = order.item
     cost = int(item.price_day) * int(order.days)
-    return render(request, 'confirmation_order.html', {'item': item}, {'cost': cost})
+    return render(request, 'update_order.html', {'item': item, 'cost': cost})
 
 
 @login_required

@@ -1,22 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
-
 <div class="w3-bar w3-large w3-black">
   <div class="w3-bar-item w3-left w3-black">Welcome: {{user.username}}</div>
   <a href="/logout/">Logout</a>
   <a href="/manage-orders/">Manage your orders</a>
   <a href="/search/">Search for items</a>
 </div>
-<div class="w3-container w3-center" style="padding:100px  ">
-name : {{item.name}} <br>
+{% csrf_token %}
+
+<div class="w3-container w3-center" style="padding:100px;">
+  <div class="w3-display-middle">
+Name : {{item.name}} <br>
+Price : {{item.price_day}} PLN / day<br><br>
+Total cost: {{ cost}} PLN <br>
+{% csrf_token %}
 <form class="w3-container" action="/confirmed/" method="post">
-  {% csrf_token %}
-  Price : {{item.price_day}} PLN / day<br><br>
-  Total cost: {{ cost}} PLN <br>
-  <lable>For How many days ?</lable> : <input type="text" name="days"><br><br>
+  <label>For How many days ?</label>:
+  <input type="text" name="days"><br><br>
   <input type="hidden" value= {{item.id}} name="id">
-  <input class="w3-btn w3-green" type="submit" value="confirm order"><br><br>
-  {% endblock %}
+  <input class="w3-btn w3-green" type="submit" value="update order"><br><br>
   <br><br>
 </form>
 </div>
+{% endblock %}
