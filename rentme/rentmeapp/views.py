@@ -9,6 +9,7 @@ from django.shortcuts import render, redirect
 from django.template.defaulttags import csrf_token
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 
 from .forms import ToRentForm
 from .models import ToRent, Customer, Area, Orders
@@ -123,6 +124,7 @@ def rent_item(request):
 
 
 @login_required
+@csrf_exempt
 def confirm(request):
     item_id = request.POST['id']
     user = request.user
