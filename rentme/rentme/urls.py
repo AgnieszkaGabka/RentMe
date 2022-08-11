@@ -6,6 +6,7 @@ from rentmeapp import views
 
 from rentmeapp.views import HomePageView, AddItemView
 
+
 urlpatterns = [
     url('home/', HomePageView.as_view(), name='home'),
     path('admin/', admin.site.urls),

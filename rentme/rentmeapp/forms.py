@@ -1,7 +1,7 @@
 from django import forms
 
 
-from rentmeapp.models import ToRent, CATEGORY, Area
+from rentmeapp.models import ToRent, CATEGORY, Area, Orders
 
 
 # class AreaForm(forms.ModelForm):
@@ -26,3 +26,12 @@ class ToRentForm(forms.ModelForm):
         super(ToRentForm, self).__init__(*args, **kwargs)
         #self.fields['user_defined_area'] = forms.ModelChoiceField(queryset=Area.objects.filter(user=user))
 
+class UpdateOrderForm(forms.ModelForm):
+
+    class Meta:
+        model = Orders
+        exclude = ("user",)
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', '')
+        super(UpdateOrderForm, self).__init__(*args, **kwargs)

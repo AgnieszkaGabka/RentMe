@@ -12,9 +12,9 @@
   <div class="w3-display-middle">
 Name : {{item.name}} <br>
 Price : {{item.price_day}} PLN / day<br><br>
-Total cost: {{ cost}} PLN <br>
+Total cost: {{cost}} PLN <br>
 {% csrf_token %}
-<form class="w3-container" action="/confirmed/" method="post">
+<form class="w3-container" action="/manage-orders/" method="post">
   <label>For How many days ?</label>:
   <input type="text" name="days"><br><br>
   <input type="hidden" value= {{item.id}} name="id">

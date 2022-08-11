@@ -11,7 +11,7 @@ from django.utils.datastructures import MultiValueDictKeyError
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
-from .forms import ToRentForm
+from .forms import ToRentForm, UpdateOrderForm
 from .models import ToRent, Customer, Area, Orders
 
 
@@ -145,6 +145,7 @@ def confirm(request):
 
 
 @login_required
+@csrf_exempt
 def manage_orders(request):
     order_list = []
     user = request.user
@@ -155,17 +156,18 @@ def manage_orders(request):
             order_list.append(order_dictionary)
     return render(request, 'manage_orders.html', {'od': order_list})
 
-
 @login_required
+@csrf_exempt
 def update_order(request):
-    order_id = request.POST['id']
-    order = Orders.objects.get(id=order_id)
-    item = order.item
-    cost = int(item.price_day) * int(order.days)
-    return render(request, 'update_order.html', {'item': item, 'cost': cost})
+    id = request.POST['id']
+    order = Orders.objects.get(id=id)
+    cost = int(order.days) * int(order.item.price_day)
+    order.save()
+    return render(request, 'manage_orders.html', {'order': order, 'cost': cost})
 
 
 @login_required
+@csrf_exempt
 def update_item(request):
     item_id = request.POST['id']
     item = ToRent.objects.get(id=item_id)
@@ -176,6 +178,7 @@ def update_item(request):
 
 
 @login_required
+@csrf_exempt
 def delete_order(request):
     order_id = request.POST['id']
     order = Orders.objects.get(id=order_id)
@@ -187,6 +190,7 @@ def delete_order(request):
 
 
 @login_required
+@csrf_exempt
 def delete_item(request):
     item_id = request.POST['id']
     item = ToRent.objects.get(id=item_id)
@@ -221,6 +225,7 @@ class AddItemView(View):
 
 
 @login_required
+@csrf_exempt
 def manage_items(request):
     username = request.user
     user = User.objects.get(username=username)
@@ -232,6 +237,7 @@ def manage_items(request):
 
 
 @login_required
+@csrf_exempt
 def delete(request):
     item_id = request.POST['id']
     item = ToRent.objects.get(id=item_id)
