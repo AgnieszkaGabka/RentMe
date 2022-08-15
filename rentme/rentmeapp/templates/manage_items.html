@@ -16,7 +16,10 @@
 <table class="w3-table w3-striped w3-center">
 {% for item in items_list %}
   <tr>
-    <td style="padding:20;">Name : {{item.name}}</td>
+    <td style="padding:20;">Name: {{item.name}}</td>
+    <td style="padding:20;">Available from: {{item.date_from}}</td>
+    <td style="padding:20;">Available to: {{item.date_to}}</td>
+    <td style="padding:20;">Price per day: {{item.price_day}}</td>
     <td style="padding:20;"><form action = "/delete-item/" method="post">
           {% csrf_token %}
           <input type="hidden" name="id" value="{{item.id}}">

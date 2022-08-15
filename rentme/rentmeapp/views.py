@@ -198,15 +198,11 @@ def update_item(request):
 def confirm_item_change(request):
     user = request.user
     item_id = request.POST['id']
-    item_name = request.POST['name']
-    item_date_from = request.POST['date_from']
-    item_date_to = request.POST['date_to']
-    item_price_day = request.POST['price_day']
     item = ToRent.objects.get(id=item_id)
-    item.name = item_name
-    item.date_from = item_date_from
-    item.date_to = item_date_to
-    item.price_day = item_price_day
+    item.name = request.POST['name']
+    item.date_from = request.POST['date_from']
+    item.date_to = request.POST['date_to']
+    item.price_day = request.POST['price_day']
     item.save()
     user = User.objects.get(username=user)
     items_list = []

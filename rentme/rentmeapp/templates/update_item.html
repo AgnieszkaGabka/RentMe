@@ -14,13 +14,13 @@
 {% csrf_token %}
 <form class="w3-container" action="/confirm-item-change/" method="post">
   <label>Item name</label>:
-  <input type="text" name="name" value={{item.name}}><br><br>
+  <input type="text" name="name" value={{item.name}} required><br><br>
   <label>Available to rent from</label>:
-  <input type="date" name="date_from" value={{item.date_from}}><br><br>
+  <input type="date" name="date_from" value={{item.date_from}} required><br><br>
   <label>Available to rent to</label>:
-  <input type="date" name="date_to" value={{item.date_to}}><br><br>
+  <input type="date" name="date_to" value={{item.date_to}} required><br><br>
   <label>Price per day</label>:
-  <input type="text" name="price_day" value={{item.price_day}}><br><br>
+  <input type="text" name="price_day" value={{item.price_day}} required><br><br>
   <input type="hidden" value= {{item.id}} name="id">
   <input class="w3-btn w3-green" type="submit" value="update item"><br><br>
   <br><br>

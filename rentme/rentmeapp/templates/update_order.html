@@ -16,7 +16,7 @@ Total cost: {{cost}} PLN <br>
 {% csrf_token %}
 <form class="w3-container" action="/confirm-order-change/" method="post">
   <label>For How many days ?</label>:
-  <input type="text" name="days"><br><br>
+  <input type="text" name="days" required><br><br>
   <input type="hidden" value= {{order.id}} name="id">
   <input class="w3-btn w3-green" type="submit" value="update order"><br><br>
   <br><br>
