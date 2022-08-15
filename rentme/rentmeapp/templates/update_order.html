@@ -10,14 +10,14 @@
 
 <div class="w3-container w3-center" style="padding:100px;">
   <div class="w3-display-middle">
-Name : {{item.name}} <br>
-Price : {{item.price_day}} PLN / day<br><br>
+Name : {{order.name}} <br>
+Price : {{order.price_day}} PLN / day<br><br>
 Total cost: {{cost}} PLN <br>
 {% csrf_token %}
-<form class="w3-container" action="/manage-orders/" method="post">
+<form class="w3-container" action="/confirm-order-change/" method="post">
   <label>For How many days ?</label>:
   <input type="text" name="days"><br><br>
-  <input type="hidden" value= {{item.id}} name="id">
+  <input type="hidden" value= {{order.id}} name="id">
   <input class="w3-btn w3-green" type="submit" value="update order"><br><br>
   <br><br>
 </form>

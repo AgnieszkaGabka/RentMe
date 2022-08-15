@@ -156,6 +156,7 @@ def manage_orders(request):
             order_list.append(order_dictionary)
     return render(request, 'manage_orders.html', {'od': order_list})
 
+
 @login_required
 @csrf_exempt
 def update_order(request):
@@ -163,7 +164,25 @@ def update_order(request):
     order = Orders.objects.get(id=id)
     cost = int(order.days) * int(order.item.price_day)
     order.save()
-    return render(request, 'manage_orders.html', {'order': order, 'cost': cost})
+    return render(request, 'update_order.html', {'order': order, 'cost': cost})
+
+
+@login_required
+@csrf_exempt
+def confirm_order_change(request):
+    user = request.user
+    order_id = request.POST['id']
+    days = request.POST['days']
+    order = Orders.objects.get(id=order_id)
+    order.days = days
+    order.save()
+    order_list = []
+    orders = Orders.objects.filter(user=user)
+    if orders is not None:
+        for o in orders:
+            order_dictionary = {'id': o.id, 'rent': o.rent, 'item': o.item, 'days': o.days}
+            order_list.append(order_dictionary)
+    return render(request, 'manage_orders.html', {'od': order_list})
 
 
 @login_required
