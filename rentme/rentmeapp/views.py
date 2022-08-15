@@ -190,10 +190,30 @@ def confirm_order_change(request):
 def update_item(request):
     item_id = request.POST['id']
     item = ToRent.objects.get(id=item_id)
-    item.is_available = True
+    return render(request, 'update_item.html', {'item': item})
+
+
+@login_required
+@csrf_exempt
+def confirm_item_change(request):
+    user = request.user
+    item_id = request.POST['id']
+    item_name = request.POST['name']
+    item_date_from = request.POST['date_from']
+    item_date_to = request.POST['date_to']
+    item_price_day = request.POST['price_day']
+    item = ToRent.objects.get(id=item_id)
+    item.name = item_name
+    item.date_from = item_date_from
+    item.date_to = item_date_to
+    item.price_day = item_price_day
     item.save()
-    cost_day = item.price_day
-    return render(request, 'confirmation_item.html', {'item': item}, {'cost_day': cost_day})
+    user = User.objects.get(username=user)
+    items_list = []
+    my_items = ToRent.objects.filter(user=user)
+    for i in my_items:
+        items_list.append(i)
+    return render(request, 'manage_items.html', {'items_list': items_list})
 
 
 @login_required
